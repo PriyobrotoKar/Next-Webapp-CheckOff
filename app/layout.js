@@ -1,3 +1,4 @@
+import { AuthUserProvider } from "@/firebase/auth";
 import "./globals.css";
 import { Poppins } from "next/font/google";
 
@@ -14,7 +15,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <AuthUserProvider>
+        <body className={poppins.className}>{children}</body>
+      </AuthUserProvider>
     </html>
   );
 }

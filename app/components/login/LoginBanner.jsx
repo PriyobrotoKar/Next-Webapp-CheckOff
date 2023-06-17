@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import "./banner.css";
-const Banner = () => {
+const LoginBanner = () => {
   return (
     <div>
       <div className="relative">
@@ -15,7 +15,7 @@ const Banner = () => {
           />
         </div>
         <div className="mt-12 space-y-1">
-          <h1 className="text-2xl text-center">Welcome to CheckOff</h1>
+          <h1 className="text-2xl text-center">Welcome back</h1>
           <p className="text-sm text-[#9B9B9B] text-center">
             Please enter your details to sign in
           </p>
@@ -29,4 +29,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
+export default LoginBanner;

@@ -1,0 +1,7 @@
+.gridGradient {
+  background: radial-gradient(
+    60.8% 44.8% at 50% 30%,
+    rgba(165, 124, 248, 0) 0%,
+    #26242b 100%
+  );
+}
