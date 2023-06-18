@@ -7,6 +7,8 @@ import Loader from "./components/Loader";
 import { useEffect } from "react";
 import Welcome from "./components/Welcome.jsx/Welcome";
 import Navbar from "./components/Navbar";
+import AddNewTodo from "./components/AddNewTodo";
+import TodoDialog from "./components/createTodo/TodoDialog";
 
 export default function Home() {
   const { authUser, isLoading, signOut } = useAuth();
@@ -24,6 +26,8 @@ export default function Home() {
     <div>
       <Navbar signOut={signOut} />
       <Welcome authUser={authUser} />
+      <AddNewTodo />
+      <TodoDialog />
     </div>
   );
 }

@@ -7,9 +7,9 @@ const Navbar = ({ signOut }) => {
     <div className="p-10 flex justify-between">
       <div></div>
       <div className="flex items-center gap-4">
-        <button className="">
+        {/* <button className="">
           <RiSettings4Fill className="text-xl" />
-        </button>
+        </button> */}
         <button
           onClick={signOut}
           className="flex gap-2 items-center bg-[#4F378B] px-4 py-3 rounded-xl"

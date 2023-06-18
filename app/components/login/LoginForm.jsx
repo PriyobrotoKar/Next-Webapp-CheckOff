@@ -40,7 +40,7 @@ const LoginForm = () => {
               Password
             </label>
             <input
-              type="text"
+              type="password"
               placeholder="• • • • • • • "
               value={password}
               onChange={(e) => setPassword(e.target.value)}
