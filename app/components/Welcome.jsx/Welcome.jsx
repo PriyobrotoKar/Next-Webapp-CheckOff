@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 
-const Welcome = ({ authUser }) => {
+const Welcome = ({ authUser, todos }) => {
   const headerRef = useRef(null);
   const subTitleRef = useRef(null);
   const profileImageRef = useRef(null);
@@ -92,7 +92,7 @@ const Welcome = ({ authUser }) => {
           )}
         </div>
         <div className="text-neutral-400" ref={subTitleRef}>
-          You’ve got 7 tasks coming up in the next days.
+          You’ve got {todos.length} tasks coming up in the next days.
         </div>
       </div>
     </div>
