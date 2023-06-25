@@ -3,7 +3,12 @@ import { db } from "@/firebase/firebase";
 import { addDoc, collection } from "firebase/firestore";
 import React, { useLayoutEffect, useRef, useState } from "react";
 
-const TodoDialog = ({ reference, fetchTodos, setShowDialog }) => {
+const TodoDialog = ({
+  reference,
+  fetchTodos,
+  setShowDialog,
+  fetchCompletedTodos,
+}) => {
   const [taskInput, setTaskInput] = useState({
     todoTitle: "",
     todoDesc: "",
@@ -23,12 +28,14 @@ const TodoDialog = ({ reference, fetchTodos, setShowDialog }) => {
           completed: false,
         });
         fetchTodos();
+        fetchCompletedTodos();
         setTaskInput({
           todoTitle: "",
           todoDesc: "",
         });
         setShowDesc(false);
         setShowDialog(false);
+
         console.log("Document written with ID: ", docRef.id);
       } catch (error) {
         console.error(error);
@@ -42,7 +49,7 @@ const TodoDialog = ({ reference, fetchTodos, setShowDialog }) => {
       className="translate-y-full opacity-0 fixed w-[50rem] rounded-xl py-6 px-8 bg-[#2D2B31BB] bottom-[15%] backdrop-blur-sm left-1/2 -translate-x-1/2"
     >
       <div className="flex gap-4 items-center">
-        <div className="w-4 h-4 border border-neutral-200 rounded-[0.15rem]"></div>
+        <div className="w-6 h-6 border-2 border-neutral-200 rounded-lg mt-0.5"></div>
         <input
           placeholder="Enter your task"
           value={taskInput.todoTitle}
@@ -55,7 +62,7 @@ const TodoDialog = ({ reference, fetchTodos, setShowDialog }) => {
         />
       </div>
       {showDesc && (
-        <div className="mt-4 ml-7">
+        <div className="mt-4 ml-10">
           <textarea
             placeholder="Description"
             value={taskInput.todoDesc}

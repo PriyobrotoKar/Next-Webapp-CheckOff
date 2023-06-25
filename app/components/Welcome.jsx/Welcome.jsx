@@ -1,8 +1,10 @@
 "use client";
+import { db } from "@/firebase/firebase";
 import { upload } from "@/firebase/storage";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { Power4, gsap } from "gsap";
 import Image from "next/image";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 
 const Welcome = ({ authUser, todos }) => {

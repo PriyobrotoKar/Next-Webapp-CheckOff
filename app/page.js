@@ -21,6 +21,7 @@ export default function Home() {
   const pathname = usePathname();
   const [showDialog, setShowDialog] = useState(false);
   const [todos, setTodos] = useState([]);
+  const [completedTodos, setCompletedTodos] = useState([]);
 
   const todoDialogRef = useRef();
   const fetchTodos = async () => {
@@ -33,10 +34,27 @@ export default function Home() {
       let data = [];
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
         data.push({ ...doc.data(), id: doc.id });
       });
-      setTodos(data);
+      setTodos(data.reverse());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchCompletedTodos = async () => {
+    try {
+      const q = query(
+        collection(db, "todos"),
+        where("owner", "==", authUser.uid),
+        where("completed", "==", false)
+      );
+      const querySnapshot = await getDocs(q);
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setCompletedTodos(data.reverse());
     } catch (error) {
       console.error(error);
     }
@@ -48,6 +66,7 @@ export default function Home() {
     }
     if (authUser) {
       fetchTodos();
+      fetchCompletedTodos();
     }
   }, [authUser, isLoading]);
 
@@ -88,13 +107,18 @@ export default function Home() {
   ) : (
     <div>
       <Navbar signOut={signOut} handler={handler} />
-      <Welcome authUser={authUser} todos={todos} />
-      <Todos todos={todos} />
+      <Welcome authUser={authUser} todos={completedTodos} />
+      <Todos
+        todos={todos}
+        fetchTodos={fetchTodos}
+        fetchCompletedTodos={fetchCompletedTodos}
+      />
       <AddNewTodo showDialog={showDialog} setShowDialog={setShowDialog} />
       <TodoDialog
         reference={todoDialogRef}
         setShowDialog={setShowDialog}
         fetchTodos={fetchTodos}
+        fetchCompletedTodos={fetchCompletedTodos}
       />
     </div>
   );
