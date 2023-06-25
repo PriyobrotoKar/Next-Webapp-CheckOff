@@ -36,7 +36,7 @@ export default function Home() {
         // doc.data() is never undefined for query doc snapshots
         data.push({ ...doc.data(), id: doc.id });
       });
-      setTodos(data.reverse());
+      setTodos(data);
     } catch (error) {
       console.error(error);
     }
@@ -54,7 +54,7 @@ export default function Home() {
         // doc.data() is never undefined for query doc snapshots
         data.push({ ...doc.data(), id: doc.id });
       });
-      setCompletedTodos(data.reverse());
+      setCompletedTodos(data);
     } catch (error) {
       console.error(error);
     }
