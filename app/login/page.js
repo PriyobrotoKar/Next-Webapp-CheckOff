@@ -19,7 +19,7 @@ const page = () => {
   return isLoading || (!isLoading && authUser) ? (
     <Loader />
   ) : (
-    <div className="w-[25rem] px-10 rounded-3xl overflow-hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#26242A]">
+    <div className="w-full h-[100svh] md:h-fit rounded-none md:w-[25rem] px-10 md:rounded-3xl overflow-hidden md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 bg-[#26242A]">
       <LoginBanner />
       <GoogleLogin />
       <div className="flex gap-2 items-center mt-6">

@@ -2,7 +2,14 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import Todo from "./Todo";
 import { Power1, gsap } from "gsap";
 
-const Todos = ({ todos, fetchTodos, fetchCompletedTodos }) => {
+const Todos = ({
+  todos,
+  fetchTodos,
+  fetchCompletedTodos,
+  setShowDialog,
+  showDialog,
+  setTodoInfo,
+}) => {
   const todoRef = useRef();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   useLayoutEffect(() => {
@@ -19,7 +26,10 @@ const Todos = ({ todos, fetchTodos, fetchCompletedTodos }) => {
     }
   }, [todos]);
   return (
-    <div ref={todoRef} className="w-[50rem] mx-auto space-y-6 mt-10">
+    <div
+      ref={todoRef}
+      className="w-[85%] md:w-[50rem] mx-auto space-y-6 mt-10 pb-10"
+    >
       {todos.map((todo) => {
         return (
           <Todo
@@ -27,6 +37,9 @@ const Todos = ({ todos, fetchTodos, fetchCompletedTodos }) => {
             todo={todo}
             fetchTodos={fetchTodos}
             fetchCompletedTodos={fetchCompletedTodos}
+            setShowDialog={setShowDialog}
+            showDialog={showDialog}
+            setTodoInfo={setTodoInfo}
           />
         );
       })}

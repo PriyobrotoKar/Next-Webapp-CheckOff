@@ -10,7 +10,7 @@ import Navbar from "./components/Navbar";
 import AddNewTodo from "./components/AddNewTodo";
 import TodoDialog from "./components/createTodo/TodoDialog";
 import { Power4, gsap } from "gsap";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import Todos from "./components/Todos/Todos";
 import { data } from "autoprefixer";
@@ -20,15 +20,23 @@ export default function Home() {
   const router = useRouter();
   const pathname = usePathname();
   const [showDialog, setShowDialog] = useState(false);
+  const [isEdititng, setIsEditing] = useState(false);
   const [todos, setTodos] = useState([]);
   const [completedTodos, setCompletedTodos] = useState([]);
+  const [todoInfo, setTodoInfo] = useState({
+    todoTitle: "",
+    todoDesc: "",
+    todoId: null,
+  });
+  const [showDesc, setShowDesc] = useState(false);
 
   const todoDialogRef = useRef();
   const fetchTodos = async () => {
     try {
       const q = query(
         collection(db, "todos"),
-        where("owner", "==", authUser.uid)
+        where("owner", "==", authUser.uid),
+        orderBy("timestamp", "desc")
       );
       const querySnapshot = await getDocs(q);
       let data = [];
@@ -92,6 +100,13 @@ export default function Home() {
     if (todoDialogRef.current !== null) {
       if (!todoDialogRef.current.contains(e.target)) {
         setShowDialog(false);
+        setIsEditing(false);
+        setShowDesc(false);
+        setTodoInfo({
+          todoTitle: "",
+          todoDesc: "",
+          todoId: null,
+        });
       }
     }
   };
@@ -105,13 +120,22 @@ export default function Home() {
   return !authUser ? (
     <Loader />
   ) : (
-    <div>
+    <div className="relative min-h-[100svh]">
+      <div
+        className={
+          " w-full min-h-full bg-[#141414bb] backdrop-blur-sm absolute inset-0 transition-all duration-200 " +
+          (showDialog ? "z-20" : "opacity-0 -z-20")
+        }
+      ></div>
       <Navbar signOut={signOut} handler={handler} />
       <Welcome authUser={authUser} todos={completedTodos} />
       <Todos
         todos={todos}
         fetchTodos={fetchTodos}
         fetchCompletedTodos={fetchCompletedTodos}
+        showDialog={showDialog}
+        setShowDialog={setShowDialog}
+        setTodoInfo={setTodoInfo}
       />
       <AddNewTodo showDialog={showDialog} setShowDialog={setShowDialog} />
       <TodoDialog
@@ -119,6 +143,11 @@ export default function Home() {
         setShowDialog={setShowDialog}
         fetchTodos={fetchTodos}
         fetchCompletedTodos={fetchCompletedTodos}
+        todoInfo={todoInfo}
+        isEdititng={isEdititng}
+        setIsEditing={setIsEditing}
+        showDesc={showDesc}
+        setShowDesc={setShowDesc}
       />
     </div>
   );
