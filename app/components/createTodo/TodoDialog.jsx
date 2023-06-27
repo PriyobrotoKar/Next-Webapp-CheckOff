@@ -1,7 +1,9 @@
 import { useAuth } from "@/firebase/auth";
 import { db } from "@/firebase/firebase";
+import createCategory from "@/utils/createCategory";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { IoMdAdd } from "react-icons/io";
 
 const TodoDialog = ({
   reference,
@@ -18,6 +20,7 @@ const TodoDialog = ({
     todoTitle: "",
     todoDesc: "",
   });
+  const [categoryInput, setCategoryInput] = useState("");
 
   const { authUser } = useAuth();
 
@@ -76,6 +79,15 @@ const TodoDialog = ({
       }
     }
   };
+  const handleCreateCategory = (e) => {
+    if (e.key == "Enter" && e.target.value !== "") {
+      console.log("Create category");
+      createCategory({
+        id: authUser.uid,
+        category: categoryInput,
+      });
+    }
+  };
   useEffect(() => {
     if (todoInfo.todoId !== null) {
       setIsEditing(true);
@@ -118,6 +130,20 @@ const TodoDialog = ({
           />
         </div>
       )}
+      <div className="flex gap-3 mt-2 items-center">
+        <div className="w-7 h-[1.4rem] md:h-7 bg-[#26242A] rounded-lg mt-0.5 flex justify-center items-center">
+          <IoMdAdd className="text-xl" />
+        </div>
+        <div>
+          <input
+            type="text"
+            className="bg-[#26242A] text-sm outline-none  px-4 py-2 rounded-lg"
+            onKeyUp={handleCreateCategory}
+            value={categoryInput}
+            onChange={(e) => setCategoryInput(e.target.value)}
+          />
+        </div>
+      </div>
       {taskInput.todoTitle && (
         <div
           onClick={() => setShowDesc(!showDesc)}
