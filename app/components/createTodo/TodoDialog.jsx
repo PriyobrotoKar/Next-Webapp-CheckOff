@@ -1,6 +1,7 @@
 import { useAuth } from "@/firebase/auth";
 import { db } from "@/firebase/firebase";
 import createCategory from "@/utils/createCategory";
+import { fetchAllCategories, fetchCategories } from "@/utils/fetchCategories";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -21,6 +22,8 @@ const TodoDialog = ({
     todoDesc: "",
   });
   const [categoryInput, setCategoryInput] = useState("");
+  const [isAddingCat, setIsAddingCat] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const { authUser } = useAuth();
 
@@ -88,6 +91,10 @@ const TodoDialog = ({
       });
     }
   };
+  const getCategories = async () => {
+    const cats = await fetchAllCategories(authUser.uid);
+    setCategories(cats);
+  };
   useEffect(() => {
     if (todoInfo.todoId !== null) {
       setIsEditing(true);
@@ -97,6 +104,7 @@ const TodoDialog = ({
       todoTitle: todoInfo.todoTitle,
       todoDesc: todoInfo.todoDesc,
     });
+    getCategories();
   }, [todoInfo]);
 
   return (
@@ -131,18 +139,37 @@ const TodoDialog = ({
         </div>
       )}
       <div className="flex gap-3 mt-2 items-center">
-        <div className="w-7 h-[1.4rem] md:h-7 bg-[#26242A] rounded-lg mt-0.5 flex justify-center items-center">
+        <button
+          onClick={(e) => setIsAddingCat(!isAddingCat)}
+          className="w-7 h-[1.4rem] cursor-pointer md:h-7 bg-[#26242A] rounded-lg mt-0.5 flex justify-center items-center"
+        >
           <IoMdAdd className="text-xl" />
-        </div>
-        <div>
-          <input
-            type="text"
-            className="bg-[#26242A] text-sm outline-none  px-4 py-2 rounded-lg"
-            onKeyUp={handleCreateCategory}
-            value={categoryInput}
-            onChange={(e) => setCategoryInput(e.target.value)}
-          />
-        </div>
+        </button>
+        {isAddingCat ? (
+          <div>
+            <input
+              type="text"
+              className="bg-[#26242A] text-sm outline-none  px-4 py-2 rounded-lg"
+              onKeyUp={handleCreateCategory}
+              value={categoryInput}
+              placeholder="Create a new Category"
+              onChange={(e) => setCategoryInput(e.target.value)}
+            />
+          </div>
+        ) : (
+          <div className="text-black">
+            <select
+              name=""
+              id=""
+              className="w-[13rem] px-2 py-1.5 rounded-lg bg-[#26242A] text-neutral-300"
+            >
+              <option value="">None</option>
+              {categories.map((cat) => {
+                return <option value={cat.catName}>{cat.catName}</option>;
+              })}
+            </select>
+          </div>
+        )}
       </div>
       {taskInput.todoTitle && (
         <div
