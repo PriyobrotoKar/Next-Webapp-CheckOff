@@ -99,7 +99,7 @@ const Welcome = ({ authUser, todos }) => {
   }, []);
 
   return (
-    <div ref={bannerRef} className="w-fit mx-auto  text-center space-y-6 mt-5">
+    <div ref={bannerRef} className="w-fit mx-auto  text-center space-y-6">
       <label htmlFor="upload">
         <div
           ref={profileImageRef}

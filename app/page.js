@@ -12,6 +12,7 @@ import { Power4, gsap } from "gsap";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import Todos from "./components/Todos/Todos";
+import CategoryTabs from "./components/CategoryTabs";
 
 export default function Home() {
   const { authUser, isLoading, signOut } = useAuth();
@@ -19,6 +20,7 @@ export default function Home() {
   const pathname = usePathname();
   const [showDialog, setShowDialog] = useState(false);
   const [isEdititng, setIsEditing] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [todos, setTodos] = useState([]);
   const [completedTodos, setCompletedTodos] = useState([]);
   const [todoInfo, setTodoInfo] = useState({
@@ -131,6 +133,11 @@ export default function Home() {
       ></div>
       <Navbar signOut={signOut} handler={handler} />
       <Welcome authUser={authUser} todos={completedTodos} />
+      <CategoryTabs
+        setTodos={setTodos}
+        categories={categories}
+        setCategories={setCategories}
+      />
       <Todos
         todos={todos}
         fetchTodos={fetchTodos}
@@ -150,6 +157,8 @@ export default function Home() {
         setIsEditing={setIsEditing}
         showDesc={showDesc}
         setShowDesc={setShowDesc}
+        categories={categories}
+        setCategories={setCategories}
       />
     </div>
   );

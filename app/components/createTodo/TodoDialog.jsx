@@ -17,6 +17,8 @@ const TodoDialog = ({
   isEdititng,
   showDesc,
   setShowDesc,
+  categories,
+  setCategories,
 }) => {
   const [taskInput, setTaskInput] = useState({
     todoTitle: "",
@@ -25,7 +27,7 @@ const TodoDialog = ({
   });
   const [categoryInput, setCategoryInput] = useState("");
   const [isAddingCat, setIsAddingCat] = useState(false);
-  const [categories, setCategories] = useState([]);
+
   const [catLoading, setCatLoading] = useState(false);
 
   const { authUser } = useAuth();
@@ -107,7 +109,9 @@ const TodoDialog = ({
   };
   const getCategories = async () => {
     const cats = await fetchAllCategories(authUser.uid);
-    setCategories(cats);
+    if (cats) {
+      setCategories([{ catName: "All" }, ...cats]);
+    }
   };
   useEffect(() => {
     if (todoInfo.todoId !== null) {
@@ -203,6 +207,7 @@ const TodoDialog = ({
               >
                 <option value="">None</option>
                 {categories.map((cat, ind) => {
+                  if (cat.catName === "All") return;
                   return (
                     <option key={ind} value={cat.catName}>
                       {cat.catName}

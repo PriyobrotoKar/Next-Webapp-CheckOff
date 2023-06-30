@@ -49,17 +49,14 @@ const Todo = ({
     });
   };
   return (
-    <div
-      onClick={handleEdit}
-      className="flex group/todo gap-6 font-normal bg-[#26242A] px-6 py-4 md:p-6 rounded-xl hover:shadow-xl shadow-[#000] transition-shadow duration-200 cursor-pointer"
-    >
+    <div className="flex group/todo gap-6 font-normal bg-[#26242A] px-6 py-4 md:p-6 rounded-xl hover:shadow-xl shadow-[#000] transition-shadow duration-200 cursor-pointer">
       <div
         onClick={markAsCompleted}
         className="cursor-pointer flex justify-center items-center w-6 h-6 border-2 border-neutral-200 rounded-lg mt-1"
       >
         {check && <BsCheckLg />}
       </div>
-      <div className="space-y-2 flex-1 ">
+      <div onClick={handleEdit} className="space-y-2 flex-1 ">
         <div
           className={
             "text-xl md:text-2xl " +
@@ -92,7 +89,7 @@ const Todo = ({
       <div>
         <div
           onClick={deleteTodo}
-          className="hover:bg-[#270808] group/delete transition-all duration-200 rounded-lg p-2"
+          className="relative z-30 hover:bg-[#270808] group/delete transition-all duration-200 rounded-lg p-2"
         >
           <MdDelete className="text-xl opacity-100 lg:opacity-0 group-hover/todo:opacity-100 group-hover/delete:text-red-700 transition-all duration-200  cursor-pointer" />
         </div>
