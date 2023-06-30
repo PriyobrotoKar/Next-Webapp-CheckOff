@@ -20,7 +20,7 @@ const Todos = ({
         ease: Power1,
         y: "100%",
         opacity: 0,
-        stagger: 0.2,
+        stagger: 0.175,
       });
       setTimeout(() => setIsFirstLoad(false), 3000);
     }
@@ -28,7 +28,7 @@ const Todos = ({
   return (
     <div
       ref={todoRef}
-      className="w-[85%] md:w-[50rem] mx-auto space-y-6 mt-10 pb-10"
+      className="w-[85%] lg:w-[50rem] mx-auto space-y-6 mt-10 pb-28 md:pb-10"
     >
       {todos.map((todo) => {
         return (

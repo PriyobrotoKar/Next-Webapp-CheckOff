@@ -1,11 +1,10 @@
 "use client";
-import Image from "next/image";
 
 import { useAuth } from "@/firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import Loader from "./components/Loader";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import Welcome from "./components/Welcome.jsx/Welcome";
+import Welcome from "./components/Welcome/Welcome";
 import Navbar from "./components/Navbar";
 import AddNewTodo from "./components/AddNewTodo";
 import TodoDialog from "./components/createTodo/TodoDialog";
@@ -13,7 +12,6 @@ import { Power4, gsap } from "gsap";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import Todos from "./components/Todos/Todos";
-import { data } from "autoprefixer";
 
 export default function Home() {
   const { authUser, isLoading, signOut } = useAuth();
@@ -26,6 +24,7 @@ export default function Home() {
   const [todoInfo, setTodoInfo] = useState({
     todoTitle: "",
     todoDesc: "",
+    todoCat: "",
     todoId: null,
   });
   const [showDesc, setShowDesc] = useState(false);
@@ -105,17 +104,20 @@ export default function Home() {
         setTodoInfo({
           todoTitle: "",
           todoDesc: "",
+          todoCat: "",
           todoId: null,
         });
       }
     }
   };
   useEffect(() => {
-    document.addEventListener("click", handler, true);
-    () => {
-      return document.removeEventListener("click", handler, true);
-    };
-  }, []);
+    if (authUser) {
+      document.addEventListener("click", handler, true);
+      () => {
+        return document.removeEventListener("click", handler, true);
+      };
+    }
+  }, [authUser]);
 
   return !authUser ? (
     <Loader />

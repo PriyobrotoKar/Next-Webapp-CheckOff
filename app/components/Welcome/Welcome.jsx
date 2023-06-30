@@ -30,7 +30,7 @@ const Welcome = ({ authUser, todos }) => {
   useLayoutEffect(() => {
     const tl = gsap.timeline();
     let mm = gsap.matchMedia(),
-      breakPoint = 800;
+      breakPoint = 979;
 
     mm.add(
       {
@@ -38,7 +38,7 @@ const Welcome = ({ authUser, todos }) => {
         isMobile: `(max-width: ${breakPoint - 1}px)`,
       },
       (context) => {
-        let { isDesktop, isMobile, reduceMotion } = context.conditions;
+        let { isDesktop } = context.conditions;
 
         tl.fromTo(
           headerRef.current,

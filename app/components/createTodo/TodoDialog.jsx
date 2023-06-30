@@ -5,6 +5,7 @@ import { fetchAllCategories, fetchCategories } from "@/utils/fetchCategories";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
+import { RxCross2 } from "react-icons/rx";
 
 const TodoDialog = ({
   reference,
@@ -20,10 +21,12 @@ const TodoDialog = ({
   const [taskInput, setTaskInput] = useState({
     todoTitle: "",
     todoDesc: "",
+    todoCat: "",
   });
   const [categoryInput, setCategoryInput] = useState("");
   const [isAddingCat, setIsAddingCat] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [catLoading, setCatLoading] = useState(false);
 
   const { authUser } = useAuth();
 
@@ -34,6 +37,7 @@ const TodoDialog = ({
         content: {
           title: taskInput.todoTitle,
           desc: taskInput.todoDesc,
+          category: taskInput.todoCat,
         },
         completed: false,
         timestamp: new Date().getTime(),
@@ -43,6 +47,7 @@ const TodoDialog = ({
       setTaskInput({
         todoTitle: "",
         todoDesc: "",
+        todoCat: "",
       });
       setShowDesc(false);
       setShowDialog(false);
@@ -59,6 +64,7 @@ const TodoDialog = ({
         content: {
           title: taskInput.todoTitle,
           desc: taskInput.todoDesc,
+          category: taskInput.todoCat,
         },
       });
       fetchTodos();
@@ -82,13 +88,21 @@ const TodoDialog = ({
       }
     }
   };
-  const handleCreateCategory = (e) => {
+  const handleCreateCategory = async (e) => {
     if (e.key == "Enter" && e.target.value !== "") {
       console.log("Create category");
-      createCategory({
-        id: authUser.uid,
-        category: categoryInput,
-      });
+
+      await createCategory(
+        {
+          id: authUser.uid,
+          category: categoryInput,
+        },
+        setCatLoading
+      );
+      setCategoryInput("");
+      setIsAddingCat(!isAddingCat);
+
+      getCategories();
     }
   };
   const getCategories = async () => {
@@ -103,6 +117,7 @@ const TodoDialog = ({
     setTaskInput({
       todoTitle: todoInfo.todoTitle,
       todoDesc: todoInfo.todoDesc,
+      todoCat: todoInfo.todoCat,
     });
     getCategories();
   }, [todoInfo]);
@@ -138,47 +153,75 @@ const TodoDialog = ({
           />
         </div>
       )}
-      <div className="flex gap-3 mt-2 items-center">
-        <button
-          onClick={(e) => setIsAddingCat(!isAddingCat)}
-          className="w-7 h-[1.4rem] cursor-pointer md:h-7 bg-[#26242A] rounded-lg mt-0.5 flex justify-center items-center"
-        >
-          <IoMdAdd className="text-xl" />
-        </button>
-        {isAddingCat ? (
-          <div>
-            <input
-              type="text"
-              className="bg-[#26242A] text-sm outline-none  px-4 py-2 rounded-lg"
-              onKeyUp={handleCreateCategory}
-              value={categoryInput}
-              placeholder="Create a new Category"
-              onChange={(e) => setCategoryInput(e.target.value)}
-            />
-          </div>
-        ) : (
-          <div className="text-black">
-            <select
-              name=""
-              id=""
-              className="w-[13rem] px-2 py-1.5 rounded-lg bg-[#26242A] text-neutral-300"
-            >
-              <option value="">None</option>
-              {categories.map((cat) => {
-                return <option value={cat.catName}>{cat.catName}</option>;
-              })}
-            </select>
+      <div className="flex justify-between">
+        <div className="flex gap-3 mt-2 items-center">
+          <button
+            onClick={() => {
+              setCategoryInput("");
+              setIsAddingCat(!isAddingCat);
+            }}
+            className={
+              "w-7 h-[1.4rem] cursor-pointer md:h-7  rounded-lg mt-0.5 flex justify-center items-center " +
+              (isAddingCat ? "bg-[#b8313c]" : "bg-[#26242A]")
+            }
+          >
+            {isAddingCat ? (
+              <RxCross2 className="text-xl" />
+            ) : (
+              <IoMdAdd className="text-xl" />
+            )}
+          </button>
+          {isAddingCat ? (
+            <div className="relative">
+              <input
+                type="text"
+                className={
+                  "bg-[#26242A] text-sm outline-none  px-4 py-2 rounded-lg " +
+                  (catLoading ? "text-[#cecbcc]" : "")
+                }
+                onKeyUp={handleCreateCategory}
+                value={categoryInput}
+                placeholder="Create a new Category"
+                onChange={(e) => setCategoryInput(e.target.value)}
+              />
+              {catLoading && (
+                <div className="absolute right-2 top-0.5">
+                  <img className="w-8" src="/loader2.svg" alt="" />
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-black">
+              <select
+                name=""
+                id=""
+                value={taskInput.todoCat}
+                onChange={(e) =>
+                  setTaskInput({ ...taskInput, todoCat: e.target.value })
+                }
+                className="w-[13rem] cursor-pointer px-2 py-[0.35rem] rounded-lg bg-[#26242A] text-neutral-300 border-r-4 border-transparent"
+              >
+                <option value="">None</option>
+                {categories.map((cat, ind) => {
+                  return (
+                    <option key={ind} value={cat.catName}>
+                      {cat.catName}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          )}
+        </div>
+        {taskInput.todoTitle && (
+          <div
+            onClick={() => setShowDesc(!showDesc)}
+            className="ml-auto w-fit mt-4 cursor-pointer text-sm text-neutral-400 hover:text-neutral-300 transition-all duration-200"
+          >
+            {!showDesc ? "Add Description" : "Remove Description"}
           </div>
         )}
       </div>
-      {taskInput.todoTitle && (
-        <div
-          onClick={() => setShowDesc(!showDesc)}
-          className="ml-auto w-fit mt-4 cursor-pointer text-sm text-neutral-400 hover:text-neutral-300 transition-all duration-200"
-        >
-          {!showDesc ? "Add Description" : "Remove Description"}
-        </div>
-      )}
     </div>
   );
 };

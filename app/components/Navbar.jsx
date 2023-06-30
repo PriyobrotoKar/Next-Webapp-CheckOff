@@ -1,10 +1,12 @@
 import React from "react";
 import { TbLogout } from "react-icons/tb";
 import { RiSettings4Fill } from "react-icons/ri";
+import { getAuth } from "firebase/auth";
 
 const Navbar = ({ signOut, handler }) => {
+  const auth = getAuth();
   const logout = () => {
-    signOut();
+    signOut(auth);
     document.removeEventListener("click", handler, true);
   };
   return (
