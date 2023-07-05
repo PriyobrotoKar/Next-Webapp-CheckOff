@@ -136,6 +136,7 @@ export default function Home() {
       <CategoryTabs
         setTodos={setTodos}
         categories={categories}
+        fetchTodos={fetchTodos}
         setCategories={setCategories}
       />
       <Todos

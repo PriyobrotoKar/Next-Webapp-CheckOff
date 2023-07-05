@@ -1,7 +1,11 @@
 "use client";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithRedirect,
+} from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 
 const provider = new GoogleAuthProvider();
@@ -9,7 +13,7 @@ const provider = new GoogleAuthProvider();
 const GoogleLogin = () => {
   const signUpWithGoogle = async () => {
     try {
-      const user = await signInWithPopup(auth, provider);
+      const user = await signInWithRedirect(auth, provider);
       console.log(user);
     } catch (e) {
       console.error(e);

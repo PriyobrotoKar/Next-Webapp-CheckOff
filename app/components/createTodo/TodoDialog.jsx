@@ -157,7 +157,7 @@ const TodoDialog = ({
           />
         </div>
       )}
-      <div className="flex justify-between">
+      <div>
         <div className="flex gap-3 mt-2 items-center">
           <button
             onClick={() => {
@@ -176,11 +176,11 @@ const TodoDialog = ({
             )}
           </button>
           {isAddingCat ? (
-            <div className="relative">
+            <div className="relative  flex-1 ">
               <input
                 type="text"
                 className={
-                  "bg-[#26242A] text-sm outline-none  px-4 py-2 rounded-lg " +
+                  "bg-[#26242A] w-full text-sm outline-none  px-4 py-2 rounded-lg " +
                   (catLoading ? "text-[#cecbcc]" : "")
                 }
                 onKeyUp={handleCreateCategory}

@@ -28,7 +28,7 @@ const Todos = ({
   return (
     <div
       ref={todoRef}
-      className="w-[85%] lg:w-[50rem] mx-auto space-y-6 mt-6 pb-28 md:pb-10"
+      className="w-[85%] lg:w-[50rem] mx-auto space-y-6 mt-6 pb-28"
     >
       {todos.map((todo) => {
         return (
