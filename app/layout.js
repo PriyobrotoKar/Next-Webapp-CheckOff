@@ -19,12 +19,12 @@ export const metadata = {
     url: "https://check-off.vercel.app/",
     images: [
       {
-        url: "https://nextjs.org/og.png",
+        url: "https://raw.githubusercontent.com/PriyobrotoKar/Next-Webapp-CheckOff/master/public/metaImage.png",
         width: 800,
         height: 600,
       },
       {
-        url: "https://nextjs.org/og-alt.png",
+        url: "https://raw.githubusercontent.com/PriyobrotoKar/Next-Webapp-CheckOff/master/public/metaImage.png",
         width: 1800,
         height: 1600,
         alt: "My custom alt",
@@ -37,7 +37,9 @@ export const metadata = {
     title: "CheckOff",
     description:
       "CheckOff is a modern task management app with a user-friendly interface developed using React and Next JS. Tasks are stored and retrieved using a backend built with Next JS and Firebase. The app supports task creation, updating, and deletion, as well as organization through lists or tags. Users can create an account to sync their tasks across all devices.",
-    images: ["https://nextjs.org/og.png"],
+    images: [
+      "https://raw.githubusercontent.com/PriyobrotoKar/Next-Webapp-CheckOff/master/public/metaImage.png",
+    ],
   },
 };
 
