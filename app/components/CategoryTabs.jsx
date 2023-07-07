@@ -21,14 +21,21 @@ import createCategory from "@/utils/createCategory";
 import { fetchAllCategories } from "@/utils/fetchCategories";
 import useDraggableScroll from "use-draggable-scroll";
 
-const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
+const CategoryTabs = ({
+  setTodos,
+  categories,
+  setCategories,
+  fetchTodos,
+  activeTab,
+  setActiveTab,
+}) => {
   const { authUser } = useAuth();
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [isCatEditing, setIsCatEditing] = useState(false);
   const [catLoading, setCatLoading] = useState(false);
   const [matchTabEdit, setMatchTabEdit] = useState(false);
   const [input, setInput] = useState("");
-  const [activeTab, setActiveTab] = useState("All");
+
   const [editTodos, setEditTodos] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
   const [catId, setCatId] = useState("");
@@ -86,8 +93,6 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
   const handleCreateCategory = async () => {
     if (input !== "") {
       try {
-        console.log("Create category");
-
         await createCategory(
           {
             id: authUser.uid,
@@ -121,7 +126,6 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         data.push(doc.id);
-        console.log(doc.id, " => ", doc.data());
       });
 
       setEditTodos(data);
@@ -144,7 +148,7 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
             await updateDoc(todoRef, {
               "content.category": input,
             });
-            console.log(todoId, "updated");
+
             callback();
           } catch (error) {
             console.error(error);
@@ -154,8 +158,6 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
 
       const fetchingEditedTodos = async () => {
         try {
-          console.log(input);
-          console.log(activeTab);
           const q =
             activeTab !== "All"
               ? matchTabEdit
@@ -212,7 +214,6 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         data.push(doc.id);
-        console.log(doc.id, " => ", doc.data());
       });
       data.forEach(async (data) => {
         try {
@@ -226,7 +227,15 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
           console.error(error);
         }
       });
-      fetchTodos();
+      if (activeTab === cat.catName) {
+        setActiveTab("All");
+        Array.from(tabRef.current.children).forEach((element) => {
+          element.classList.remove("bg-[#170a18]");
+        });
+        Array.from(tabRef.current.children)[0]?.classList.add("bg-[#170a18]");
+      } else {
+        fetchTodos();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -252,7 +261,6 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
     if (isFirstRender) {
       Array.from(tabRef.current.children)[0]?.classList.add("bg-[#170a18]");
       if (tabRef.current && categories !== []) {
-        console.log(tabRef.current.children);
         gsap.from(tabRef.current.children, {
           y: "30%",
           delay: 3.5,
@@ -265,7 +273,6 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
     }
   }, [categories]);
   useEffect(() => {
-    console.log("hide");
     document.addEventListener("click", (e) => {
       if (optionsBtnRef.current !== null) {
         if (
@@ -281,6 +288,9 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
       }
     });
   }, []);
+  useEffect(() => {
+    fetchTodos();
+  }, [activeTab]);
   return (
     <div className="w-[90%] md:w-[50rem] mx-auto  mt-4">
       <div className="flex justify-between items-center gap-2 relative">

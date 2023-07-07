@@ -29,16 +29,25 @@ export default function Home() {
     todoCat: "",
     todoId: null,
   });
+  const [activeTab, setActiveTab] = useState("All");
   const [showDesc, setShowDesc] = useState(false);
 
   const todoDialogRef = useRef();
   const fetchTodos = async () => {
     try {
-      const q = query(
-        collection(db, "todos"),
-        where("owner", "==", authUser.uid),
-        orderBy("timestamp", "desc")
-      );
+      const q =
+        activeTab === "All"
+          ? query(
+              collection(db, "todos"),
+              where("owner", "==", authUser.uid),
+              orderBy("timestamp", "desc")
+            )
+          : query(
+              collection(db, "todos"),
+              where("owner", "==", authUser.uid),
+              where("content.category", "==", activeTab),
+              orderBy("timestamp", "desc")
+            );
       const querySnapshot = await getDocs(q);
       let data = [];
       querySnapshot.forEach((doc) => {
@@ -138,6 +147,8 @@ export default function Home() {
         categories={categories}
         fetchTodos={fetchTodos}
         setCategories={setCategories}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       />
       <Todos
         todos={todos}
@@ -146,6 +157,9 @@ export default function Home() {
         showDialog={showDialog}
         setShowDialog={setShowDialog}
         setTodoInfo={setTodoInfo}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        setTodos={setTodos}
       />
       <AddNewTodo showDialog={showDialog} setShowDialog={setShowDialog} />
       <TodoDialog

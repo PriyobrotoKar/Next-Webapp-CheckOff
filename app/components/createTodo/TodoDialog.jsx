@@ -53,8 +53,6 @@ const TodoDialog = ({
       });
       setShowDesc(false);
       setShowDialog(false);
-
-      console.log("Document written with ID: ", docRef.id);
     } catch (error) {
       console.error(error);
     }

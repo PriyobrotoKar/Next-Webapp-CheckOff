@@ -9,6 +9,9 @@ const Todos = ({
   setShowDialog,
   showDialog,
   setTodoInfo,
+  activeTab,
+  setActiveTab,
+  setTodos,
 }) => {
   const todoRef = useRef();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -40,6 +43,9 @@ const Todos = ({
             setShowDialog={setShowDialog}
             showDialog={showDialog}
             setTodoInfo={setTodoInfo}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            setTodos={setTodos}
           />
         );
       })}

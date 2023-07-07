@@ -13,7 +13,6 @@ const createCategory = async (data, setCatLoading, setError) => {
         owner: data.id,
         timestamp: new Date().getTime(),
       });
-      console.log("created category with id:" + docRef.id);
       setCatLoading(false);
     } else {
       setCatLoading(false);

@@ -1,9 +1,19 @@
 "use client";
 import { db } from "@/firebase/firebase";
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { BsCheckLg } from "react-icons/bs";
+import { useAuth } from "@/firebase/auth";
 
 const Todo = ({
   todo,
@@ -12,7 +22,10 @@ const Todo = ({
   setShowDialog,
   showDialog,
   setTodoInfo,
+  activeTab,
+  setTodos,
 }) => {
+  const { authUser, isLoading, signOut } = useAuth();
   const [show, setShow] = useState(false);
   const [check, setCheck] = useState(todo.completed);
 

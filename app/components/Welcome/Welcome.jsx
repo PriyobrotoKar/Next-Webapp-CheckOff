@@ -117,6 +117,7 @@ const Welcome = ({ authUser, todos }) => {
             src={photo}
             alt=""
             fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
           />
 
           <div className="absolute w-full bottom-0 bg-[#4f378b59] backdrop-blur-md py-1 opacity-0 hover:opacity-100 peer-hover:opacity-100 transition-all">
