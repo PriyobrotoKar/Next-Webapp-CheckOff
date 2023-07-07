@@ -7,7 +7,7 @@ import GoogleLogin from "../components/signup/GoogleLogin";
 import SignUpForm from "../components/signup/SignUpForm";
 import Loader from "../components/Loader";
 
-const page = () => {
+const Page = () => {
   const { authUser, isLoading } = useAuth();
   const router = useRouter();
 
@@ -32,4 +32,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
