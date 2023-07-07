@@ -157,15 +157,15 @@ const TodoDialog = ({
           />
         </div>
       )}
-      <div>
-        <div className="flex gap-3 mt-2 items-center">
+      <div className="flex flex-col gap-3 md:flex-row justify-between items-center mt-4">
+        <div className="flex w-full md:w-fit gap-3 items-center">
           <button
             onClick={() => {
               setCategoryInput("");
               setIsAddingCat(!isAddingCat);
             }}
             className={
-              "w-7 h-[1.4rem] cursor-pointer md:h-7  rounded-lg mt-0.5 flex justify-center items-center " +
+              "w-7 h-[1.8rem] cursor-pointer md:h-7  rounded-lg mt-0.5 flex justify-center items-center " +
               (isAddingCat ? "bg-[#b8313c]" : "bg-[#26242A]")
             }
           >
@@ -176,11 +176,11 @@ const TodoDialog = ({
             )}
           </button>
           {isAddingCat ? (
-            <div className="relative  flex-1 ">
+            <div className="relative flex-1">
               <input
                 type="text"
                 className={
-                  "bg-[#26242A] w-full text-sm outline-none  px-4 py-2 rounded-lg " +
+                  "bg-[#26242A] w-full md:w-[13rem] text-sm outline-none  px-4 py-2 rounded-lg " +
                   (catLoading ? "text-[#cecbcc]" : "")
                 }
                 onKeyUp={handleCreateCategory}
@@ -195,7 +195,7 @@ const TodoDialog = ({
               )}
             </div>
           ) : (
-            <div className="text-black">
+            <div className="text-black flex-1">
               <select
                 name=""
                 id=""
@@ -203,7 +203,7 @@ const TodoDialog = ({
                 onChange={(e) =>
                   setTaskInput({ ...taskInput, todoCat: e.target.value })
                 }
-                className="w-[13rem] cursor-pointer px-2 py-[0.35rem] rounded-lg bg-[#26242A] text-neutral-300 border-r-4 border-transparent"
+                className="w-full md:w-[13rem] cursor-pointer px-2 py-[0.35rem] rounded-lg bg-[#26242A] text-neutral-300 border-r-4 border-transparent"
               >
                 <option value="">None</option>
                 {categories.map((cat, ind) => {
@@ -218,14 +218,34 @@ const TodoDialog = ({
             </div>
           )}
         </div>
-        {taskInput.todoTitle && (
-          <div
-            onClick={() => setShowDesc(!showDesc)}
-            className="ml-auto w-fit mt-4 cursor-pointer text-sm text-neutral-400 hover:text-neutral-300 transition-all duration-200"
-          >
-            {!showDesc ? "Add Description" : "Remove Description"}
-          </div>
-        )}
+        <div className="flex justify-end ml-auto items-center gap-2">
+          {taskInput.todoTitle && (
+            <div
+              onClick={() => {
+                setShowDesc(!showDesc);
+                if (showDesc) setTaskInput({ ...taskInput, todoDesc: "" });
+              }}
+              className=" w-fit cursor-pointer text-xs md:text-sm text-neutral-400 hover:text-neutral-300 transition-all duration-200"
+            >
+              {!showDesc ? "Add Description" : "Remove Description"}
+            </div>
+          )}
+          {!isEdititng ? (
+            <button
+              onClick={addTodo}
+              className="bg-green-600 px-3 py-1.5 rounded-lg text-sm md:text-base"
+            >
+              Add Todo
+            </button>
+          ) : (
+            <button
+              onClick={updateTodo}
+              className="bg-green-600 px-3 py-1.5 rounded-lg text-sm md:text-base"
+            >
+              Edit Todo
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

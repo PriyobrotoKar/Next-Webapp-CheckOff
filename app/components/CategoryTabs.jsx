@@ -28,10 +28,11 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
   const [catLoading, setCatLoading] = useState(false);
   const [matchTabEdit, setMatchTabEdit] = useState(false);
   const [input, setInput] = useState("");
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState("All");
   const [editTodos, setEditTodos] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
   const [catId, setCatId] = useState("");
+  const [error, setError] = useState("");
   const tabRef = useRef(null);
   const lineRef = useRef(null);
   const optionsBtnRef = useRef(null);
@@ -84,18 +85,23 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
   };
   const handleCreateCategory = async () => {
     if (input !== "") {
-      console.log("Create category");
+      try {
+        console.log("Create category");
 
-      await createCategory(
-        {
-          id: authUser.uid,
-          category: input,
-        },
-        setCatLoading
-      );
-      setInput("");
+        await createCategory(
+          {
+            id: authUser.uid,
+            category: input,
+          },
+          setCatLoading,
+          setError
+        );
+        setInput("");
 
-      getCategories();
+        getCategories();
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   const handleSetCategory = async (cat) => {
@@ -233,6 +239,12 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
         duration: 1,
         ease: Power4,
       });
+      gsap.from(optionsBtnRef.current, {
+        autoAlpha: 0,
+        delay: 4,
+        ease: Power4,
+        duration: 1.5,
+      });
     }
   }, []);
 
@@ -243,7 +255,7 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
         console.log(tabRef.current.children);
         gsap.from(tabRef.current.children, {
           y: "30%",
-          delay: 3,
+          delay: 3.5,
           autoAlpha: 0,
           duration: 0.5,
           stagger: 0.1,
@@ -253,6 +265,7 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
     }
   }, [categories]);
   useEffect(() => {
+    console.log("hide");
     document.addEventListener("click", (e) => {
       if (optionsBtnRef.current !== null) {
         if (
@@ -260,6 +273,8 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
           manageCatRef.current !== null
         ) {
           if (!manageCatRef.current.contains(e.target)) {
+            setInput("");
+            setIsCatEditing(false);
             setShowOptions(false);
           }
         }
@@ -272,7 +287,7 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
         <div
           ref={tabRef}
           onMouseDown={onMouseDown}
-          className="flex gap-2 md:gap-4 overflow-x-hidden overflow-y-hidden"
+          className="flex gap-2 md:gap-4 overflow-x-auto md:overflow-x-hidden overflow-y-hidden"
         >
           {categories.map((cat, ind) => {
             return (
@@ -296,12 +311,13 @@ const CategoryTabs = ({ setTodos, categories, setCategories, fetchTodos }) => {
         {showOptions && (
           <div
             ref={manageCatRef}
-            className="absolute w-full right-0 top-full bg-[#2e2d31a1] mt-2 px-4 py-6 z-40 backdrop-blur-sm rounded-lg space-y-4 shadow-lg"
+            className="absolute w-full md:w-[25rem] right-0 top-full bg-[#2e2d31a1] mt-2 px-4 py-6 z-40 backdrop-blur-sm rounded-lg space-y-4 shadow-lg"
           >
             <div>Manage Categories</div>
             <div className="flex justify-between items-center bg-[#232225] px-3 py-2 rounded-lg">
               <input
                 value={input}
+                placeholder="Create a new category"
                 onChange={(e) => {
                   setInput(e.target.value);
                 }}

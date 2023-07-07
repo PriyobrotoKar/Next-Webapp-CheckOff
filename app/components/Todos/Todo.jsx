@@ -49,7 +49,7 @@ const Todo = ({
     });
   };
   return (
-    <div className="flex group/todo gap-6 font-normal bg-[#26242A] px-6 py-4 md:p-6 rounded-xl hover:shadow-xl shadow-[#000] transition-shadow duration-200 cursor-pointer">
+    <div className="flex group/todo gap-6 font-normal bg-[#26242A] p-4 md:p-6 rounded-xl hover:shadow-xl shadow-[#000] transition-shadow duration-200 cursor-pointer">
       <div
         onClick={markAsCompleted}
         className="cursor-pointer flex justify-center items-center w-6 h-6 border-2 border-neutral-200 hover:border-neutral-400 rounded-lg mt-1"

@@ -2,7 +2,7 @@ import { db } from "@/firebase/firebase";
 import { doc, addDoc, collection } from "firebase/firestore";
 import { fetchCategories } from "./fetchCategories";
 
-const createCategory = async (data, setCatLoading) => {
+const createCategory = async (data, setCatLoading, setError) => {
   try {
     console.log(data);
     setCatLoading(true);
@@ -20,7 +20,7 @@ const createCategory = async (data, setCatLoading) => {
       throw "category exists";
     }
   } catch (error) {
-    console.error(error);
+    setError(error);
     setCatLoading(false);
   }
 };

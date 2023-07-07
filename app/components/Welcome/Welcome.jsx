@@ -45,10 +45,12 @@ const Welcome = ({ authUser, todos }) => {
           {
             autoAlpha: 0,
             y: isDesktop ? "15vh" : "9vh",
+            width: isDesktop ? "100%" : "20rem",
             fontSize: isDesktop ? "4rem" : "2.5rem",
           },
           {
             autoAlpha: 1,
+            width: isDesktop ? "100%" : "16rem",
             y: isDesktop ? "15vh" : "9vh",
             duration: 1.5,
             ease: Power4,
@@ -99,13 +101,23 @@ const Welcome = ({ authUser, todos }) => {
   }, []);
 
   return (
-    <div ref={bannerRef} className="w-fit mx-auto  text-center space-y-6">
-      <label htmlFor="upload">
+    <div
+      ref={bannerRef}
+      className="w-fit mx-auto  text-center space-y-2 md:space-y-6"
+    >
+      <label htmlFor="upload" className="w-fit block mx-auto">
         <div
           ref={profileImageRef}
-          className="relative w-fit mx-auto rounded-full overflow-hidden cursor-pointer"
+          className="relative  mx-auto w-24 h-24 rounded-full overflow-hidden cursor-pointer"
         >
-          <Image className="peer" src={photo} alt="" width={96} height={96} />
+          <Image
+            className={
+              "peer object-cover object-center " + (loading ? "opacity-40" : "")
+            }
+            src={photo}
+            alt=""
+            fill
+          />
 
           <div className="absolute w-full bottom-0 bg-[#4f378b59] backdrop-blur-md py-1 opacity-0 hover:opacity-100 peer-hover:opacity-100 transition-all">
             <MdModeEditOutline className="mx-auto" />
@@ -119,8 +131,8 @@ const Welcome = ({ authUser, todos }) => {
         onChange={handleChange}
         accept=".png,.jpg"
       />
-      <div className="space-y-3">
-        <div ref={headerRef} className="text-4xl text-neutral-300">
+      <div className="space-y-1 md:space-y-3">
+        <div ref={headerRef} className="mx-auto text-4xl text-neutral-300">
           Welcome back,{" "}
           {authUser.username.substring(
             0,
